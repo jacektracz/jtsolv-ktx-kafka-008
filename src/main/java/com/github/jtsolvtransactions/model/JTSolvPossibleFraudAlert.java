@@ -1,18 +1,18 @@
 package com.github.jtsolvtransactions.model;
 
-public class PossibleFraudAlert {
+public class JTSolvPossibleFraudAlert {
 
     private Long balanceId;
     private Long rejectedTransactionsCount;
     private String message;
 
-    public PossibleFraudAlert(Long balanceId, Long rejectedTransactionsCount, String message) {
+    public JTSolvPossibleFraudAlert(Long balanceId, Long rejectedTransactionsCount, String message) {
         this.balanceId = balanceId;
         this.rejectedTransactionsCount = rejectedTransactionsCount;
         this.message = message;
     }
 
-    public PossibleFraudAlert() {
+    public JTSolvPossibleFraudAlert() {
     }
 
     public Long getBalanceId() {
@@ -41,8 +41,8 @@ public class PossibleFraudAlert {
 
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof PossibleFraudAlert)) return false;
-        final PossibleFraudAlert other = (PossibleFraudAlert) o;
+        if (!(o instanceof JTSolvPossibleFraudAlert)) return false;
+        final JTSolvPossibleFraudAlert other = (JTSolvPossibleFraudAlert) o;
         if (!other.canEqual((Object) this)) return false;
         final Object this$balanceId = this.getBalanceId();
         final Object other$balanceId = other.getBalanceId();
@@ -58,7 +58,7 @@ public class PossibleFraudAlert {
     }
 
     protected boolean canEqual(final Object other) {
-        return other instanceof PossibleFraudAlert;
+        return other instanceof JTSolvPossibleFraudAlert;
     }
 
     public int hashCode() {

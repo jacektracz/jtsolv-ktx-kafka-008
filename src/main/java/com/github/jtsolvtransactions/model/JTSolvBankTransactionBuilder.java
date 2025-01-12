@@ -5,62 +5,62 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BankTransactionBuilder {
+public class JTSolvBankTransactionBuilder {
     private String id;
     private Long balanceId;
     private String concept;
     private BigDecimal amount;
     private Date time;
-    private BankTransaction.BankTransactionState stateValue;
+    private JTSolvBankTransaction.BankTransactionState stateValue;
 
 
     private boolean stateSet;
 
-    public static BankTransactionBuilder toDefaultBuilder() {
-        return new BankTransactionBuilder();
+    public static JTSolvBankTransactionBuilder toDefaultBuilder() {
+        return new JTSolvBankTransactionBuilder();
     }
 
-    BankTransactionBuilder() {
+    JTSolvBankTransactionBuilder() {
     }
 
-    public BankTransactionBuilder id(String id) {
+    public JTSolvBankTransactionBuilder id(String id) {
         this.id = id;
         return this;
     }
 
-    public BankTransactionBuilder balanceId(Long balanceId) {
+    public JTSolvBankTransactionBuilder balanceId(Long balanceId) {
         this.balanceId = balanceId;
         return this;
     }
 
-    public BankTransactionBuilder concept(String concept) {
+    public JTSolvBankTransactionBuilder concept(String concept) {
         this.concept = concept;
         return this;
     }
 
-    public BankTransactionBuilder amount(BigDecimal amount) {
+    public JTSolvBankTransactionBuilder amount(BigDecimal amount) {
         this.amount = amount;
         return this;
     }
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    public BankTransactionBuilder time(Date time) {
+    public JTSolvBankTransactionBuilder time(Date time) {
         this.time = time;
         return this;
     }
 
-    public BankTransactionBuilder state(BankTransaction.BankTransactionState state) {
+    public JTSolvBankTransactionBuilder state(JTSolvBankTransaction.BankTransactionState state) {
         this.stateValue = state;
         this.stateSet = true;
         return this;
     }
 
-    public BankTransaction build() {
-        BankTransaction.BankTransactionState stateValue = this.stateValue;
+    public JTSolvBankTransaction build() {
+        JTSolvBankTransaction.BankTransactionState stateValue = this.stateValue;
         if (!this.stateSet) {
-            stateValue = BankTransaction.getDfaultSstate();
+            stateValue = JTSolvBankTransaction.getDfaultSstate();
         }
-        return new BankTransaction(this.id, this.balanceId, this.concept, this.amount, this.time, stateValue);
+        return new JTSolvBankTransaction(this.id, this.balanceId, this.concept, this.amount, this.time, stateValue);
     }
 
     public String toString() {

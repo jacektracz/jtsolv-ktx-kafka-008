@@ -2,8 +2,8 @@ package com.github.jtsolvtransactions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jtsolvtransactions.model.BankTransaction;
-import com.github.jtsolvtransactions.model.BankTransactionBuilder;
+import com.github.jtsolvtransactions.model.JTSolvBankTransaction;
+import com.github.jtsolvtransactions.model.JTSolvBankTransactionBuilder;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 
-public class BankTransactionProducer {
+public class JTSolvBankTransactionProducer {
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -32,99 +32,99 @@ public class BankTransactionProducer {
                 ));
 
 
-        List<BankTransaction> data1 = List.of(
-                BankTransactionBuilder.toDefaultBuilder()
+        List<JTSolvBankTransaction> data1 = List.of(
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .time(new Date())
                         .concept("Income")
                         .amount(new BigDecimal(4000))
                         .build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(2L)
                         .time(new Date())
                         .amount(new BigDecimal(3000)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Amazon")
                         .time(new Date())
                         .amount(new BigDecimal(-50)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Rent")
                         .time(new Date())
                         .amount(new BigDecimal(-1000)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Electricity")
                         .time(new Date())
                         .amount(new BigDecimal(-100)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Wallmart")
                         .time(new Date())
                         .amount(new BigDecimal(-60)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Vodafone")
                         .time(new Date())
                         .amount(new BigDecimal(-25)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Amazon")
                         .time(new Date())
                         .amount(new BigDecimal(-20)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Netflix")
                         .time(new Date())
                         .amount(new BigDecimal(-10)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Transport")
                         .time(new Date())
                         .amount(new BigDecimal(-10)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Transport")
                         .time(new Date())
                         .amount(new BigDecimal(-10)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(4L)
                         .time(new Date())
                         .amount(new BigDecimal(2000)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(4L)
                         .time(new Date())
                         .amount(new BigDecimal(-2500)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(3L)
                         .time(new Date())
                         .amount(new BigDecimal(1000)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .time(new Date())
                         .amount(new BigDecimal(-500)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(2L)
                         .time(new Date())
                         .amount(new BigDecimal(-4000)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(3L)
                         .time(new Date())
@@ -134,7 +134,7 @@ public class BankTransactionProducer {
                 .map(bankTransaction -> new ProducerRecord<>("bank-transactions", bankTransaction.getBalanceId(), toJson(bankTransaction)))
                 .forEach(record -> send(bankTransactionProducer, record));
 
-        BankTransaction bankTransaction = BankTransactionBuilder.toDefaultBuilder()
+        JTSolvBankTransaction bankTransaction = JTSolvBankTransactionBuilder.toDefaultBuilder()
                 .id(UUID.randomUUID().toString())
                 .balanceId(3L)
                 .time(new Date())
@@ -144,7 +144,7 @@ public class BankTransactionProducer {
 
         while(true) {
             Thread.sleep(4000L);
-            Stream.of(BankTransactionBuilder.toDefaultBuilder()
+            Stream.of(JTSolvBankTransactionBuilder.toDefaultBuilder()
                             .id(UUID.randomUUID().toString())
                             .balanceId(3L)
                             .time(new Date())
@@ -169,7 +169,7 @@ public class BankTransactionProducer {
     }
 
 
-    private static String toJson(BankTransaction bankTransaction) {
+    private static String toJson(JTSolvBankTransaction bankTransaction) {
         try {
             return OBJECT_MAPPER.writeValueAsString(bankTransaction);
         } catch (JsonProcessingException e) {

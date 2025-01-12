@@ -1,9 +1,9 @@
 package com.github.jtsolvtransactions.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.jtsolvtransactions.model.BankBalance;
-import com.github.jtsolvtransactions.model.JsonSerde;
-import com.github.jtsolvtransactions.topology.BankBalanceTopology;
+import com.github.jtsolvtransactions.model.JTSolvBankBalance;
+import com.github.jtsolvtransactions.model.JTSolvJsonSerde;
+import com.github.jtsolvtransactions.topology.JTSolvBankBalanceTopology;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 
 @Component
-public class BankBalanceRepository extends GenericKafkaStreamsRepository<Long, BankBalance> {
+public class BankBalanceRepository extends GenericKafkaStreamsRepository<Long, JTSolvBankBalance> {
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -27,22 +27,22 @@ public class BankBalanceRepository extends GenericKafkaStreamsRepository<Long, B
     ) {
         super();
         super.setKeySerde(Serdes.Long());
-        super.setValueSerde(new JsonSerde<>(BankBalance.class));
+        super.setValueSerde(new JTSolvJsonSerde<>(JTSolvBankBalance.class));
         super.setHostInfo(hostInfo);
         super.setKafkaStreams(kafkaStreams);
-        super.setStoreName(BankBalanceTopology.BANK_BALANCES_STORE);
+        super.setStoreName(JTSolvBankBalanceTopology.BANK_BALANCES_STORE);
         super.setFindRemotelyUri("/bank-balance/%s");
     }
 
     @Override
-    protected BankBalance findRemotely(Long key, HostInfo hostInfo) {
+    protected JTSolvBankBalance findRemotely(Long key, HostInfo hostInfo) {
         dbg("Finding Bank Balance with key {} remotely in host {}" + key + hostInfo);
         var url = "http://%s:%d" + super.getFindRemotelyUri();
         var urlWithParams = url.formatted(hostInfo.host(), hostInfo.port(), key.toString());
         var okHttpClient = new OkHttpClient();
         Request request = new Request.Builder().url(urlWithParams).build();
         try (Response response = okHttpClient.newCall(request).execute()) {
-            return OBJECT_MAPPER.readValue(Objects.requireNonNull(response.body()).string(), BankBalance.class);
+            return OBJECT_MAPPER.readValue(Objects.requireNonNull(response.body()).string(), JTSolvBankBalance.class);
         } catch (Exception e) {
             throw new RuntimeException("Exception reading bank balance from remote server");
         }

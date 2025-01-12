@@ -1,9 +1,9 @@
 package com.github.jtsolvtransactions.topology;
 
-import com.github.jtsolvtransactions.model.BankBalance;
-import com.github.jtsolvtransactions.model.BankTransaction;
-import com.github.jtsolvtransactions.model.BankTransactionBuilder;
-import com.github.jtsolvtransactions.model.JsonSerde;
+import com.github.jtsolvtransactions.model.JTSolvBankBalance;
+import com.github.jtsolvtransactions.model.JTSolvBankTransaction;
+import com.github.jtsolvtransactions.model.JTSolvBankTransactionBuilder;
+import com.github.jtsolvtransactions.model.JTSolvJsonSerde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.TestInputTopic;
@@ -25,24 +25,24 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class BankBalanceTopologyTest {
 
     TopologyTestDriver testDriver;
-    private TestInputTopic<Long, BankTransaction> bankTransactionTopic;
-    private TestOutputTopic<Long, BankBalance> bankBalanceTopic;
-    private TestOutputTopic<Long, BankTransaction> rejectedBankTransactionTopic;
+    private TestInputTopic<Long, JTSolvBankTransaction> bankTransactionTopic;
+    private TestOutputTopic<Long, JTSolvBankBalance> bankBalanceTopic;
+    private TestOutputTopic<Long, JTSolvBankTransaction> rejectedBankTransactionTopic;
 
     @BeforeEach
     void setup() {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "test");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234");
-        testDriver = new TopologyTestDriver(BankBalanceTopology.buildTopology(), props);
+        testDriver = new TopologyTestDriver(JTSolvBankBalanceTopology.buildTopology(), props);
 
-        var bankBalanceJsonSerde = new JsonSerde<>(BankBalance.class);
-        var bankTransactionJsonSerde = new JsonSerde<>(BankTransaction.class);
+        var bankBalanceJsonSerde = new JTSolvJsonSerde<>(JTSolvBankBalance.class);
+        var bankTransactionJsonSerde = new JTSolvJsonSerde<>(JTSolvBankTransaction.class);
 
-        bankTransactionTopic = testDriver.createInputTopic(BankBalanceTopology.BANK_TRANSACTIONS, Serdes.Long().serializer(), bankTransactionJsonSerde.serializer());
+        bankTransactionTopic = testDriver.createInputTopic(JTSolvBankBalanceTopology.BANK_TRANSACTIONS, Serdes.Long().serializer(), bankTransactionJsonSerde.serializer());
 
-        bankBalanceTopic = testDriver.createOutputTopic(BankBalanceTopology.BANK_BALANCES, Serdes.Long().deserializer(), bankBalanceJsonSerde.deserializer());
-        rejectedBankTransactionTopic = testDriver.createOutputTopic(BankBalanceTopology.REJECTED_TRANSACTIONS, Serdes.Long().deserializer(), bankTransactionJsonSerde.deserializer());
+        bankBalanceTopic = testDriver.createOutputTopic(JTSolvBankBalanceTopology.BANK_BALANCES, Serdes.Long().deserializer(), bankBalanceJsonSerde.deserializer());
+        rejectedBankTransactionTopic = testDriver.createOutputTopic(JTSolvBankBalanceTopology.REJECTED_TRANSACTIONS, Serdes.Long().deserializer(), bankTransactionJsonSerde.deserializer());
     }
 
     @AfterEach
@@ -53,16 +53,16 @@ class BankBalanceTopologyTest {
     @Test
     void testTopology() {
         List.of(
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .balanceId(1L)
                         .time(new Date())
                         .amount(new BigDecimal(500))
                         .build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .balanceId(2L)
                         .time(new Date())
                         .amount(new BigDecimal(3000)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .balanceId(1L)
                         .time(new Date())
                         .amount(new BigDecimal(500)).build()
@@ -92,18 +92,18 @@ class BankBalanceTopologyTest {
     void testTopologyWhenRejection() {
         var rejectedTransactionId = UUID.randomUUID().toString();
         List.of(
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(rejectedTransactionId)
                         .balanceId(1L)
                         .time(new Date())
                         .amount(new BigDecimal(-500))
                         .build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(2L)
                         .time(new Date())
                         .amount(new BigDecimal(3000)).build(),
-                BankTransactionBuilder.toDefaultBuilder()
+                JTSolvBankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .time(new Date())

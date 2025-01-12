@@ -1,6 +1,6 @@
 package com.github.jtsolvtransactions.config;
 
-import com.github.jtsolvtransactions.topology.BankBalanceTopology;
+import com.github.jtsolvtransactions.topology.JTSolvBankBalanceTopology;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Properties;
 
 @Configuration
-public class StreamConfiguration {
+public class JTSolvStreamConfiguration {
 
     @Value("${host.info:localhost:8080}")
     private String hostInfo;
@@ -38,7 +38,7 @@ public class StreamConfiguration {
 
     @Bean
     public KafkaStreams kafkaStreams(@Qualifier("kafkaStreamsConfiguration") Properties streamConfiguration) {
-        var topology = BankBalanceTopology.buildTopology();
+        var topology = JTSolvBankBalanceTopology.buildTopology();
         var kafkaStreams = new KafkaStreams(topology, streamConfiguration);
 
         // clean state directory to start fresh

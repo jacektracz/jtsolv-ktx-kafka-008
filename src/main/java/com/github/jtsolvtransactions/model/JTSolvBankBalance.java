@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 
 
-public class BankBalance {
+public class JTSolvBankBalance {
 
     private Long id;
 
@@ -20,9 +20,9 @@ public class BankBalance {
 
     private Date lastUpdate;
 
-    private TreeSet<BankTransaction> latestTransactions = new TreeSet<>();
+    private TreeSet<JTSolvBankTransaction> latestTransactions = new TreeSet<>();
 
-    public BankBalance(){
+    public JTSolvBankBalance(){
 
     }
 
@@ -50,28 +50,28 @@ public class BankBalance {
         this.lastUpdate = lastUpdate;
     }
 
-    public TreeSet<BankTransaction> getLatestTransactions() {
+    public TreeSet<JTSolvBankTransaction> getLatestTransactions() {
         return latestTransactions;
     }
 
-    public void setLatestTransactions(TreeSet<BankTransaction> latestTransactions) {
+    public void setLatestTransactions(TreeSet<JTSolvBankTransaction> latestTransactions) {
         this.latestTransactions = latestTransactions;
     }
 
-    public BankBalance process(BankTransaction bankTransaction) {
+    public JTSolvBankBalance process(JTSolvBankTransaction bankTransaction) {
         this.id = bankTransaction.getBalanceId();
-        var transactionBuilder = BankTransactionBuilder.toDefaultBuilder();
+        var transactionBuilder = JTSolvBankTransactionBuilder.toDefaultBuilder();
         if(this.amount.add(bankTransaction.getAmount()).compareTo(BigDecimal.ZERO) >= 0) {
-            addLatestTransaction(transactionBuilder.state(BankTransaction.BankTransactionState.APPROVED).build());
+            addLatestTransaction(transactionBuilder.state(JTSolvBankTransaction.BankTransactionState.APPROVED).build());
             this.amount = this.amount.add(bankTransaction.getAmount());
         } else {
-            addLatestTransaction(transactionBuilder.state(BankTransaction.BankTransactionState.REJECTED).build());
+            addLatestTransaction(transactionBuilder.state(JTSolvBankTransaction.BankTransactionState.REJECTED).build());
         }
         this.lastUpdate = bankTransaction.getBankTransactionTime();
         return this;
     }
 
-    private void addLatestTransaction(BankTransaction transactionClone) {
+    private void addLatestTransaction(JTSolvBankTransaction transactionClone) {
         if (latestTransactions.size() > 10) latestTransactions.pollLast();
         latestTransactions.add(transactionClone);
     }

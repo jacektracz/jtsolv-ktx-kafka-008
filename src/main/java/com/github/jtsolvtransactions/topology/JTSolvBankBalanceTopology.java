@@ -1,9 +1,9 @@
 package com.github.jtsolvtransactions.topology;
 
-import com.github.jtsolvtransactions.model.BankBalance;
-import com.github.jtsolvtransactions.model.BankTransaction;
-import com.github.jtsolvtransactions.model.JsonSerde;
-import com.github.jtsolvtransactions.model.PossibleFraudAlert;
+import com.github.jtsolvtransactions.model.JTSolvBankBalance;
+import com.github.jtsolvtransactions.model.JTSolvBankTransaction;
+import com.github.jtsolvtransactions.model.JTSolvJsonSerde;
+import com.github.jtsolvtransactions.model.JTSolvPossibleFraudAlert;
 
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
@@ -13,8 +13,7 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 
-
-public class BankBalanceTopology {
+public class JTSolvBankBalanceTopology {
 
     public static final String BANK_TRANSACTIONS = "bank-transactions";
     public static final String BANK_BALANCES = "bank-balances";
@@ -23,27 +22,31 @@ public class BankBalanceTopology {
     private static final Long FRAUD_ALERT_THRESHOLD = 10L;
 
     public static Topology buildTopology() {
-        Serde<BankTransaction> bankTransactionSerde = new JsonSerde<>(BankTransaction.class);
-        Serde<BankBalance> bankBalanceSerde = new JsonSerde<>(BankBalance.class);
-        Serde<PossibleFraudAlert> possibleFraudAlertSerde = new JsonSerde<>(PossibleFraudAlert.class);
+        Serde<JTSolvBankTransaction> bankTransactionSerde = new JTSolvJsonSerde<>(JTSolvBankTransaction.class);
+        Serde<JTSolvBankBalance> bankBalanceSerde = new JTSolvJsonSerde<>(JTSolvBankBalance.class);
+        Serde<JTSolvPossibleFraudAlert> possibleFraudAlertSerde = new JTSolvJsonSerde<>(JTSolvPossibleFraudAlert.class);
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 
-        KStream<Long, BankBalance> bankBalancesStream = streamsBuilder.stream(BANK_TRANSACTIONS,
+        KStream<Long, JTSolvBankBalance> bankBalancesStream = streamsBuilder.stream(BANK_TRANSACTIONS,
                 Consumed.with(Serdes.Long(), bankTransactionSerde))
                 .groupByKey()
-                .aggregate(BankBalance::new,
+                .aggregate(JTSolvBankBalance::new,
                         (key, value, aggregate) -> aggregate.process(value),
-                        Materialized.<Long, BankBalance, KeyValueStore<Bytes, byte[]>>as(BANK_BALANCES_STORE)
+                        Materialized.<Long, JTSolvBankBalance, KeyValueStore<Bytes, byte[]>>as(BANK_BALANCES_STORE)
                             .withKeySerde(Serdes.Long())
                             .withValueSerde(bankBalanceSerde)
                 )
                 .toStream();
+
         bankBalancesStream
                 .to(BANK_BALANCES, Produced.with(Serdes.Long(), bankBalanceSerde));
 
-        var rejectedTransactionsStream = bankBalancesStream
+        KStream<Long, JTSolvBankTransaction> rejectedTransactionsStream = bankBalancesStream
                 .mapValues((readOnlyKey, value) -> value.getLatestTransactions().first())
-                .filter((key, value) -> value.bankTransactionState == BankTransaction.BankTransactionState.REJECTED);
+                .filter((key, value) -> value.bankTransactionState == JTSolvBankTransaction.BankTransactionState.REJECTED);
+
+        rejectedTransactionsStream
+                .to(REJECTED_TRANSACTIONS, Produced.with(Serdes.Long(), bankTransactionSerde));
 
         return streamsBuilder.build();
     }

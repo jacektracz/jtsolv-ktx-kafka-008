@@ -51,9 +51,9 @@ Finally, there is a test class called [BankBalanceTopologyTest](src/test/java/co
 ## Running the project
 
 ### Starting Kafka
-First, we need to start Kafka. For that we have a [docker-compose.yml file](docker-compose.yml) that will create the necessary resources for us. It will start a Zookeeper instance and a Kafka broker. It will also create the necessary topics using the script found in the [create-topics.sh](./scripts/create-topics.sh) file.
+First, we need to start Kafka. For that we have a [docker-compose.yml file](docker-compose-backup.yml) that will create the necessary resources for us. It will start a Zookeeper instance and a Kafka broker. It will also create the necessary topics using the script found in the [create-topics.sh](./scripts/create-topics.sh) file.
 ```shell
-docker compose -f ./docker-compose.yml up
+docker compose -f ./docker-compose-backup.yml up
 ```
 ### Building and starting the application
 ```shell

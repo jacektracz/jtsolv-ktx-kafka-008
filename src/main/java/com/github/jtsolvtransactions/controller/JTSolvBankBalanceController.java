@@ -1,7 +1,7 @@
 package com.github.jtsolvtransactions.controller;
 
-import com.github.jtsolvtransactions.model.BankBalance;
-import com.github.jtsolvtransactions.service.BankBalanceService;
+import com.github.jtsolvtransactions.model.JTSolvBankBalance;
+import com.github.jtsolvtransactions.service.JTSolvBankBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/bank-balance")
-public class BankBalanceController {
+public class JTSolvBankBalanceController {
 
-    private final BankBalanceService bankBalanceService;
+    private final JTSolvBankBalanceService bankBalanceService;
 
     @Autowired
-    public BankBalanceController(BankBalanceService bankBalanceService) {
+    public JTSolvBankBalanceController(JTSolvBankBalanceService bankBalanceService) {
         this.bankBalanceService = bankBalanceService;
     }
 
     @GetMapping(value = "/{bankBalanceId}", produces = "application/json")
-    public ResponseEntity<BankBalance> getBankBalance(@PathVariable("bankBalanceId") Long bankBalanceId) {
+    public ResponseEntity<JTSolvBankBalance> getBankBalance(@PathVariable("bankBalanceId") Long bankBalanceId) {
         var bankBalance = bankBalanceService.getBankBalance(bankBalanceId);
         return ResponseEntity.ok(bankBalance);
     }

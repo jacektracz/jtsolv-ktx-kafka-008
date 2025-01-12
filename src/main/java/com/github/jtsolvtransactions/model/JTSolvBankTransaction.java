@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BankTransaction implements Comparable<BankTransaction> {
+public class JTSolvBankTransaction implements Comparable<JTSolvBankTransaction> {
 
     private String id;
 
@@ -22,7 +22,7 @@ public class BankTransaction implements Comparable<BankTransaction> {
 
     public BankTransactionState bankTransactionState = BankTransactionState.CREATED;
 
-    public BankTransaction(String id, Long balanceId, String concept, BigDecimal amount, Date time, BankTransactionState state) {
+    public JTSolvBankTransaction(String id, Long balanceId, String concept, BigDecimal amount, Date time, BankTransactionState state) {
         this.id = id;
         this.balanceId = balanceId;
         this.concept = concept;
@@ -31,7 +31,7 @@ public class BankTransaction implements Comparable<BankTransaction> {
         this.bankTransactionState = state;
     }
 
-    public BankTransaction() {
+    public JTSolvBankTransaction() {
     }
 
     public static BankTransactionState getDfaultSstate() {
@@ -88,7 +88,7 @@ public class BankTransaction implements Comparable<BankTransaction> {
     }
 
     @Override
-    public int compareTo(BankTransaction o) {
+    public int compareTo(JTSolvBankTransaction o) {
         if(o == null) {
             return -1;
         }
@@ -112,8 +112,8 @@ public class BankTransaction implements Comparable<BankTransaction> {
 
     public boolean equals(final Object o) {
         if (o == this) return true;
-        if (!(o instanceof BankTransaction)) return false;
-        final BankTransaction other = (BankTransaction) o;
+        if (!(o instanceof JTSolvBankTransaction)) return false;
+        final JTSolvBankTransaction other = (JTSolvBankTransaction) o;
         if (!other.canEqual((Object) this)) return false;
         final Object this$id = this.getId();
         final Object other$id = other.getId();
@@ -122,7 +122,7 @@ public class BankTransaction implements Comparable<BankTransaction> {
     }
 
     protected boolean canEqual(final Object other) {
-        return other instanceof BankTransaction;
+        return other instanceof JTSolvBankTransaction;
     }
 
     public int hashCode() {

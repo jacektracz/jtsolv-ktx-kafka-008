@@ -9,12 +9,12 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.io.IOException;
 
-public class JsonSerde<T> implements Serde<T> {
+public class JTSolvJsonSerde<T> implements Serde<T> {
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private final Class<T> type;
 
-    public JsonSerde(Class<T> type) {
+    public JTSolvJsonSerde(Class<T> type) {
         this.type = type;
     }
 
