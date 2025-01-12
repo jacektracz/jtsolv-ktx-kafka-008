@@ -60,14 +60,14 @@ public class BankBalance {
 
     public BankBalance process(BankTransaction bankTransaction) {
         this.id = bankTransaction.getBalanceId();
-        var transactionBuilder = bankTransaction.toDefaultBuilder();
+        var transactionBuilder = BankTransactionBuilder.toDefaultBuilder();
         if(this.amount.add(bankTransaction.getAmount()).compareTo(BigDecimal.ZERO) >= 0) {
             addLatestTransaction(transactionBuilder.state(BankTransaction.BankTransactionState.APPROVED).build());
             this.amount = this.amount.add(bankTransaction.getAmount());
         } else {
             addLatestTransaction(transactionBuilder.state(BankTransaction.BankTransactionState.REJECTED).build());
         }
-        this.lastUpdate = bankTransaction.getTime();
+        this.lastUpdate = bankTransaction.getBankTransactionTime();
         return this;
     }
 

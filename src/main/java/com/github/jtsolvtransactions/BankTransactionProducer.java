@@ -3,6 +3,7 @@ package com.github.jtsolvtransactions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.jtsolvtransactions.model.BankTransaction;
+import com.github.jtsolvtransactions.model.BankTransactionBuilder;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -32,98 +33,98 @@ public class BankTransactionProducer {
 
 
         List<BankTransaction> data1 = List.of(
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .time(new Date())
                         .concept("Income")
                         .amount(new BigDecimal(4000))
                         .build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(2L)
                         .time(new Date())
                         .amount(new BigDecimal(3000)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Amazon")
                         .time(new Date())
                         .amount(new BigDecimal(-50)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Rent")
                         .time(new Date())
                         .amount(new BigDecimal(-1000)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Electricity")
                         .time(new Date())
                         .amount(new BigDecimal(-100)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Wallmart")
                         .time(new Date())
                         .amount(new BigDecimal(-60)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Vodafone")
                         .time(new Date())
                         .amount(new BigDecimal(-25)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Amazon")
                         .time(new Date())
                         .amount(new BigDecimal(-20)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Netflix")
                         .time(new Date())
                         .amount(new BigDecimal(-10)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Transport")
                         .time(new Date())
                         .amount(new BigDecimal(-10)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .concept("Transport")
                         .time(new Date())
                         .amount(new BigDecimal(-10)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(4L)
                         .time(new Date())
                         .amount(new BigDecimal(2000)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(4L)
                         .time(new Date())
                         .amount(new BigDecimal(-2500)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(3L)
                         .time(new Date())
                         .amount(new BigDecimal(1000)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(1L)
                         .time(new Date())
                         .amount(new BigDecimal(-500)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(2L)
                         .time(new Date())
                         .amount(new BigDecimal(-4000)).build(),
-                BankTransaction.toDefaultBuilder()
+                BankTransactionBuilder.toDefaultBuilder()
                         .id(UUID.randomUUID().toString())
                         .balanceId(3L)
                         .time(new Date())
@@ -133,7 +134,7 @@ public class BankTransactionProducer {
                 .map(bankTransaction -> new ProducerRecord<>("bank-transactions", bankTransaction.getBalanceId(), toJson(bankTransaction)))
                 .forEach(record -> send(bankTransactionProducer, record));
 
-        BankTransaction bankTransaction = BankTransaction.toDefaultBuilder()
+        BankTransaction bankTransaction = BankTransactionBuilder.toDefaultBuilder()
                 .id(UUID.randomUUID().toString())
                 .balanceId(3L)
                 .time(new Date())
@@ -143,7 +144,7 @@ public class BankTransactionProducer {
 
         while(true) {
             Thread.sleep(4000L);
-            Stream.of(BankTransaction.toDefaultBuilder()
+            Stream.of(BankTransactionBuilder.toDefaultBuilder()
                             .id(UUID.randomUUID().toString())
                             .balanceId(3L)
                             .time(new Date())

@@ -43,7 +43,7 @@ public class BankBalanceTopology {
 
         var rejectedTransactionsStream = bankBalancesStream
                 .mapValues((readOnlyKey, value) -> value.getLatestTransactions().first())
-                .filter((key, value) -> value.state == BankTransaction.BankTransactionState.REJECTED);
+                .filter((key, value) -> value.bankTransactionState == BankTransaction.BankTransactionState.REJECTED);
 
         return streamsBuilder.build();
     }

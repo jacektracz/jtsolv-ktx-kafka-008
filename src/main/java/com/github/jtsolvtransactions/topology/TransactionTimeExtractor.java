@@ -11,7 +11,7 @@ public class TransactionTimeExtractor implements TimestampExtractor {
     @Override
     public long extract(ConsumerRecord<Object, Object> record, long partitionTime) {
         var bankTransaction = (BankTransaction) record.value();
-        return Optional.ofNullable(bankTransaction.getTime())
+        return Optional.ofNullable(bankTransaction.getBankTransactionTime())
                 .map(it -> it.toInstant().toEpochMilli())
                 .orElse(partitionTime);
     }
