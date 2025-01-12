@@ -77,7 +77,7 @@ services:
   kafka-create-topics-jtsolv-avro-reg:
     image: confluentinc/cp-enterprise-kafka:6.0.0
     depends_on:
-      - kafka-jtsolv-avro-reg
+      - broker-jtsolv-avro-reg
     hostname: kafka-create-topics-jtsolv-avro-reg
     command: ["bash", "./create-topics.sh"]
     working_dir: /scripts
@@ -97,23 +97,6 @@ services:
     ports:
       - "8088:8088"
     depends_on:
-      - kafka-jtsolv-avro-reg
-      - schema-registry-jtsolv-avro-reg
-      -
-  # Avro producer for testing
-  avro-producer-jtsolv-avro-reg:
-    image: confluentinc/cp-kafka-avro-console-producer:latest
-    command: >
-      bash -c "echo '{\"name\":\"test\",\"age\":30}' | kafka-avro-console-producer --broker-list kafka:9092 --topic test-avro --property value.schema='{\"type\":\"record\",\"name\":\"user\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"age\",\"type\":\"int\"}]}'"
-    depends_on:
-      - kafka-jtsolv-avro-reg
+      - broker-jtsolv-avro-reg
       - schema-registry-jtsolv-avro-reg
 
-  # Avro consumer for testing
-  avro-consumer-jtsolv-avro-reg:
-    image: confluentinc/cp-kafka-avro-console-consumer:latest
-    command: >
-      bash -c "kafka-avro-console-consumer --topic test-avro --bootstrap-server kafka:9092 --from-beginning --property schema.registry.url=http://schema-registry:8081"
-    depends_on:
-      - kafka-jtsolv-avro-reg
-      - schema-registry-jtsolv-avro-reg

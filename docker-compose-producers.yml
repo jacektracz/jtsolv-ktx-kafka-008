@@ -1,0 +1,19 @@
+version: "3"
+
+# Avro producer for testing
+avro-producer-jtsolv-avro-reg:
+  image: confluentinc/cp-kafka-avro-console-producer:latest
+  command: >
+    bash -c "echo '{\"name\":\"test\",\"age\":30}' | kafka-avro-console-producer --broker-list kafka:9092 --topic test-avro --property value.schema='{\"type\":\"record\",\"name\":\"user\",\"fields\":[{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"age\",\"type\":\"int\"}]}'"
+  depends_on:
+    - broker-jtsolv-avro-reg
+    - schema-registry-jtsolv-avro-reg
+
+# Avro consumer for testing
+avro-consumer-jtsolv-avro-reg:
+  image: confluentinc/cp-kafka-avro-console-consumer:latest
+  command: >
+    bash -c "kafka-avro-console-consumer --topic test-avro --bootstrap-server kafka:9092 --from-beginning --property schema.registry.url=http://schema-registry:8081"
+  depends_on:
+    - broker-jtsolv-avro-reg
+    - schema-registry-jtsolv-avro-reg
