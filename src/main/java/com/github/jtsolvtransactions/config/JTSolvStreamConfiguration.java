@@ -16,7 +16,7 @@ import java.util.Properties;
 @Configuration
 public class JTSolvStreamConfiguration {
 
-    @Value("${host.info:localhost:8080}")
+    @Value("${host.info:localhost:7070}")
     private String hostInfo;
     @Value("${kafka.streams.state.dir:/tmp/kafka-streams}")
     private String kafkaStreamsStateDir;
@@ -26,7 +26,8 @@ public class JTSolvStreamConfiguration {
     public Properties kafkaStreamsConfiguration() {
         Properties properties = new Properties();
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "bank-balance-queries");
-        properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
+        properties.put("bootstrap.servers", "localhost:9092");
+        //properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
         properties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");

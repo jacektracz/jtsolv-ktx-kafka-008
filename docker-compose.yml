@@ -54,6 +54,24 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry-jtsolv-avro-reg
       SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper-jtsolv-avro-reg:2181"
 
+  # KSQL server
+  ksqldb-server-jtsolv-avro-reg:
+    image: confluentinc/cp-ksql-server:latest
+    hostname: ksqldb-server-jtsolv-avro-reg
+    container_name: ksqldb-server-jtsolv-avro-reg
+    environment:
+      KSQL_KSQL_SERVICE_ID: default_ksql
+      KSQL_LISTENER: http://0.0.0.0:8088
+      KSQL_BOOTSTRAP_SERVERS: broker-jtsolv-avro-reg:29092
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: http://schema-registry-jtsolv-avro-reg:8081
+      KSQL_KSQL_SINK_REPLICATION_FACTOR: 1
+      KSQL_KSQL_INTERNAL_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "8088:8088"
+    depends_on:
+      - broker-jtsolv-avro-reg
+      - schema-registry-jtsolv-avro-reg
+
   control-center-jtsolv-avro-reg:
     image: confluentinc/cp-enterprise-control-center:5.4.0
     hostname: control-center-jtsolv-avro-reg
@@ -68,11 +86,13 @@ services:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker-jtsolv-avro-reg:29092'
       CONTROL_CENTER_ZOOKEEPER_CONNECT: 'zookeeper-jtsolv-avro-reg:2181'
       CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry-jtsolv-avro-reg:8081"
+      CONTROL_CENTER_KSQL_KSQLDB1_URL: "http://ksqldb-server-jtsolv-avro-reg:8088"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
+
 
   kafka-create-topics-jtsolv-avro-reg:
     image: confluentinc/cp-enterprise-kafka:6.0.0
@@ -84,19 +104,4 @@ services:
     volumes:
       - ./scripts:/scripts
 
-  # KSQL server
-  ksql-server-jtsolv-avro-reg:
-    image: confluentinc/cp-ksql-server:latest
-    environment:
-      KSQL_KSQL_SERVICE_ID: default_ksql
-      KSQL_LISTENER: http://0.0.0.0:8088
-      KSQL_BOOTSTRAP_SERVERS: kafka-jtsolv-avro-reg:9092
-      KSQL_KSQL_SCHEMA_REGISTRY_URL: http://schema-registry-jtsolv-avro-reg:8081
-      KSQL_KSQL_SINK_REPLICATION_FACTOR: 1
-      KSQL_KSQL_INTERNAL_TOPIC_REPLICATION_FACTOR: 1
-    ports:
-      - "8088:8088"
-    depends_on:
-      - broker-jtsolv-avro-reg
-      - schema-registry-jtsolv-avro-reg
 

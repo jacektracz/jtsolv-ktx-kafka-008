@@ -1,15 +1,15 @@
 package com.github.jtsolvtransactions.service;
 
 import com.github.jtsolvtransactions.model.JTSolvBankBalance;
-import com.github.jtsolvtransactions.repository.BankBalanceRepository;
+import com.github.jtsolvtransactions.repository.JTSolvBankBalanceRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JTSolvBankBalanceService {
 
-    private final BankBalanceRepository bankBalanceRepository;
+    private final JTSolvBankBalanceRepository bankBalanceRepository;
 
-    public JTSolvBankBalanceService(BankBalanceRepository bankBalanceRepository) {
+    public JTSolvBankBalanceService(JTSolvBankBalanceRepository bankBalanceRepository) {
         this.bankBalanceRepository = bankBalanceRepository;
     }
 

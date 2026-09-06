@@ -17,11 +17,11 @@ import java.util.Objects;
 
 
 @Component
-public class BankBalanceRepository extends GenericKafkaStreamsRepository<Long, JTSolvBankBalance> {
+public class JTSolvBankBalanceRepository extends JTSolveGenericKafkaStreamsRepository<Long, JTSolvBankBalance> {
 
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    public BankBalanceRepository(
+    public JTSolvBankBalanceRepository(
             HostInfo hostInfo,
             KafkaStreams kafkaStreams
     ) {

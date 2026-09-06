@@ -1,6 +1,6 @@
 package com.github.jtsolvtransactions.repository;
 
-import com.github.jtsolvtransactions.repository.exceptions.ObjectNotFoundException;
+import com.github.jtsolvtransactions.repository.exceptions.JTSolvObjectNotFoundException;
 
 
 import org.apache.kafka.common.serialization.Serde;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 
-public abstract class GenericKafkaStreamsRepository<K,V> {
+public abstract class JTSolveGenericKafkaStreamsRepository<K,V> {
     private  Serde<K> keySerde;
     private  Serde<V> valueSerde;
     private  HostInfo hostInfo;
@@ -22,8 +22,8 @@ public abstract class GenericKafkaStreamsRepository<K,V> {
     private String storeName;
     private String findRemotelyUri;
 
-    protected GenericKafkaStreamsRepository(){}
-    protected GenericKafkaStreamsRepository(Serde<K> keySerde, Serde<V> valueSerde, HostInfo hostInfo, KafkaStreams kafkaStreams, String storeName) {
+    protected JTSolveGenericKafkaStreamsRepository(){}
+    protected JTSolveGenericKafkaStreamsRepository(Serde<K> keySerde, Serde<V> valueSerde, HostInfo hostInfo, KafkaStreams kafkaStreams, String storeName) {
         this.keySerde = keySerde;
         this.valueSerde = valueSerde;
         this.hostInfo = hostInfo;
@@ -92,7 +92,7 @@ public abstract class GenericKafkaStreamsRepository<K,V> {
         dbg("Looking for object with key: {}, locally" + key);
         return Optional
                 .ofNullable(getStore().get(key))
-                .orElseThrow(() -> new ObjectNotFoundException(key, storeName));
+                .orElseThrow(() -> new JTSolvObjectNotFoundException(key, storeName));
 
     }
 

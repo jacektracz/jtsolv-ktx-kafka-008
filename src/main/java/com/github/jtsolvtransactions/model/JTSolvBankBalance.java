@@ -65,14 +65,17 @@ public class JTSolvBankBalance {
             addLatestTransaction(transactionBuilder.state(JTSolvBankTransaction.BankTransactionState.APPROVED).build());
             this.amount = this.amount.add(bankTransaction.getAmount());
         } else {
-            addLatestTransaction(transactionBuilder.state(JTSolvBankTransaction.BankTransactionState.REJECTED).build());
+            addLatestTransaction(
+                    transactionBuilder.state(JTSolvBankTransaction.BankTransactionState.REJECTED).build());
         }
         this.lastUpdate = bankTransaction.getBankTransactionTime();
         return this;
     }
 
     private void addLatestTransaction(JTSolvBankTransaction transactionClone) {
-        if (latestTransactions.size() > 10) latestTransactions.pollLast();
+        if (latestTransactions.size() > 10) {
+            latestTransactions.pollLast();
+        }
         latestTransactions.add(transactionClone);
     }
 
